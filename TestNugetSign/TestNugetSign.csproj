@@ -3,6 +3,15 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
+    <PackageId>TestNugetSignPackage</PackageId>
+    <Authors>Tim Heuer</Authors>
+    <Company>Tim Heuer</Company>
+    <Product>TestNugetSign</Product>
+    <Description>A sample library</Description>
+    <Copyright>2021, All rights reserved</Copyright>
+    <PackageProjectUrl>https://github.com/timheuer/TestNugetSign</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/timheuer/TestNugetSign</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
 </Project>

@@ -46,7 +46,7 @@ jobs:
         encodedString: ${{ secrets.SIGNING_CERT }}
       
     - name: Sign NuGet Package
-      run: dotnet nuget sign finalpackage/*.nupkg --certificate-path ${{ steps.cert_file.outputs.filePath }} --certificate-password ${{ secrets.CERT_PWD }} --timestamper http://timestamp.digicert.com
+      run: dotnet nuget sign **/*.nupkg --certificate-path ${{ steps.cert_file.outputs.filePath }} --certificate-password ${{ secrets.CERT_PWD }} --timestamper http://timestamp.digicert.com
       
     - name: Publish signed artifact
       uses: actions/upload-artifact@v2
