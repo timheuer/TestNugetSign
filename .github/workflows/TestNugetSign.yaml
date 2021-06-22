@@ -1,0 +1,55 @@
+name: .NET Core Build and Deploy
+
+on:
+  push:
+    branches:
+    - master
+    paths-ignore:
+    - '**/*.md'
+    - '**/*.gitignore'
+    - '**/*.gitattributes'
+    - '**/*.all-contributorsrc'
+
+jobs:
+  build:
+    name: Build and package 
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core SDK
+      uses: actions/setup-dotnet@v1.8.0
+      with:
+        dotnet-version: 6.0.x
+        include-prerelease: true
+
+    - name: Restore
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+
+    - name: Pack
+      run: dotnet pack --configuration Release -o finalpackage --no-build
+
+    - name: Publish artifact
+      uses: actions/upload-artifact@master
+      with:
+        name: nupkg
+        path: finalpackage
+      
+    - name: Get certificate
+      id: cert_file
+      uses: timheuer/base64-to-file@master
+      with:
+        fileName: 'certfile.pfx'
+        encodedString: ${{ secrets.SIGNING_CERT }}
+      
+    - name: Sign NuGet Package
+      run: dotnet nuget sign finalpackage/*.nupkg --certificate-path ${{ steps.cert_file.outputs.filePath }} --certificate-password ${{ secrets.CERT_PWD }} --timestamper http://timestamp.digicert.com
+      
+    - name: Publish signed artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: signednupkg
+        path: finalpackage
